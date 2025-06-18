@@ -1,7 +1,7 @@
 import {createContext, useEffect, useState} from 'react'
 import PropTypes from 'prop-types'
 
-const initialState = {
+export const initialState = {
   theme: "system",
   setTheme: () => null,
 }
