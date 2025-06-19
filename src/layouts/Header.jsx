@@ -1,7 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ChevronsLeft } from 'lucide-react';
-import {setTheme} from '../hooks/use-theme'
+import {useTheme} from '../hooks/use-theme'
+import { Sun, Moon, Search , Bell} from 'lucide-react';
+import profile from '../assets/profile.PNG'
+
 
 const Header = ({collapsed, setCollapsed}) => {
   const {theme, setTheme} = useTheme();
@@ -12,7 +15,7 @@ const Header = ({collapsed, setCollapsed}) => {
           <ChevronsLeft className={collapsed && "rotate-180"}/>
         </button>
         <div className="input">
-          <search 
+          <Search 
             size={20} 
             className='text-slate-300'
           />
@@ -23,17 +26,29 @@ const Header = ({collapsed, setCollapsed}) => {
         <button className='btn-ghost size-10' 
         onClick={()=>setTheme(theme==="light" ? "dark" : "light")}>
 
-          <sun size={20} className="hidden dark:block"/>
+          <Sun size={20} className=" dark:block"/>
           
           <Moon size={20} className="hidden dark:block"/>
 
         </button>
+        <button className='btn-ghost size-10'>
+          <Bell size={20}/>
+        </button>
+        <button className="btn-ghost size-15 rounded-full overflow-hidden">
+            <img
+              src={profile}
+              alt="profile_image"
+              className="h-full w-full object-cover rounded-full"
+            />
+        </button>
+
       </div>
     </header>
   )
 }
-Header.PropTypes ={
-  collapsed : PropTypes.bool,
+Header.propTypes = { 
+  collapsed: PropTypes.bool,
   setCollapsed: PropTypes.func,
 };
+
 export default Header
