@@ -178,7 +178,7 @@ const Elections = () => {
         </div>
 
         {isModalOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50 p-4">
+          <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-100 p-4">
             <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl w-full max-w-lg p-6 mx-auto">
               <form onSubmit={handleSubmit} className="space-y-4">
                 <h5 className="text-lg font-semibold text-center">
