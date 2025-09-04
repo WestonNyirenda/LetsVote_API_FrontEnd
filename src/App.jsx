@@ -61,7 +61,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path:'ElectionDetails',
+        path:'ElectionDetails/:id',
         element: <ElectionDetails/>
       },
       {

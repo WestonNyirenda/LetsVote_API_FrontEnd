@@ -359,7 +359,7 @@ const Elections = () => {
                         </button>
 
                           
-                          <Link to="/Dashboard/ElectionDetails"  className="p-2  rounded-full text-green-600 hover:bg-green-200 transition">
+                          <Link to={`/Dashboard/ElectionDetails/${e.id}`}  className="p-2  rounded-full text-green-600 hover:bg-green-200 transition">
                             <Eye className="w-4 h-4" />
                           </Link>
                         
