@@ -4,7 +4,7 @@ import Spinner from "../../components/Spinner";
 import {Link} from "react-router-dom"
 
 const Elections = () => {
-  const [elections, setElections] = useState([]);
+  const [elections, setElections] = useState([]); //saving elections in an array here for Get
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);

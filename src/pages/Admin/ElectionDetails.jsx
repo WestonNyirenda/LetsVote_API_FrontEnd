@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Spinner from "../../components/Spinner";
 import { useParams } from "react-router-dom";
 import { Trash2, Pencil } from "lucide-react";
+import Position from "../../components/Position";
 
 const ElectionDetails = () => {
   const { id } = useParams(); // get election id from URL
@@ -178,7 +179,7 @@ const ElectionDetails = () => {
       </h2>
 
       {loading && (
-        <div className="flex justify-center">
+        <div className="flex justify-center text-teal-300">
           <Spinner />
         </div>
       )}
@@ -256,6 +257,12 @@ const ElectionDetails = () => {
             )}
           </div>
         </div>
+      </div>
+
+      <div className="flex flex-row p-4">
+       
+
+            <Position/>
       </div>
 
       {/* Add/Edit Candidate Modal */}
