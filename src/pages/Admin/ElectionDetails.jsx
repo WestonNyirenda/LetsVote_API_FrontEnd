@@ -19,6 +19,7 @@ const ElectionDetails = () => {
   const [editingCandidate, setEditingCandidate] = useState(null);
 
   const [submitting, setIsSubmitting] = useState(false);
+  const [positions, setPositions] = useState(null);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -45,6 +46,7 @@ const ElectionDetails = () => {
       }
 
       const data = await response.json();
+      console.log(data);
       setCandidates(data);
     } catch (err) {
       console.error("Error:", err);
@@ -171,6 +173,25 @@ const ElectionDetails = () => {
       alert("Failed to delete candidate. Check console for details.");
     }
   };
+
+  const fetchPositions =()=>{
+
+    fetch(`http://localhost:5231/api/Position/electionId?electionId=${electionId}`, {
+      method: 'GET',
+      headers: {Accept:'application/json'}
+    }).then((response)=>{
+      if(!response.ok) throw new Error('failed to fetch positions for the elections');
+      return response.json();
+      
+    }).then((data)=>{
+      console.log('fetched positions',data);
+      setPositions(data)
+    }).catch((error)=> console.error('Error fetchign positions', error))
+  };
+
+  useEffect(()=>{
+    fetchPositions();
+  },[])
 
   return (
     <>
@@ -344,19 +365,26 @@ const ElectionDetails = () => {
                 ></textarea>
               </div>
 
-              {/* Position */}
+
+             
+              {/* Position - FIXED */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Position (Optional)
+                  Position
                 </label>
-                <input
-                  type="number"
-                  name="positionId"
-                  value={formData.positionId}
-                  onChange={handleInputChange}
-                  placeholder="Optional"
-                  className="w-full border rounded-lg p-2 text-sm"
-                />
+                <select
+                  name="positionId" 
+                  value={formData.positionId} 
+                  onChange={handleInputChange} 
+                  className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                >
+                  <option value="">-- Select a Position --</option>
+                  {positions && positions.map((place) => (
+                    <option key={place.id} value={place.id}>
+                      {place.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {/* File Upload */}
@@ -435,6 +463,10 @@ const ElectionDetails = () => {
                   <p>
                     <strong>Description:</strong>{" "}
                     {selectedCandidate.description}
+                  </p>
+                  <p>
+                    <strong>Position:</strong>{"  "}
+                    {selectedCandidate.position ? selectedCandidate.position.name : 'No position assigned'}
                   </p>
                 </div>
 
