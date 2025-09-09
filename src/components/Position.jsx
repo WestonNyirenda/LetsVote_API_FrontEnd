@@ -239,7 +239,7 @@ const Position = () => {
 
         {/* Footer */}
         <div className="p-4 border-t border-gray-100 bg-gray-50 text-center text-sm text-gray-600">
-          Manage election positions and their candidates
+          Manage election positions and their candidates zoona izi
         </div>
       </div>
 

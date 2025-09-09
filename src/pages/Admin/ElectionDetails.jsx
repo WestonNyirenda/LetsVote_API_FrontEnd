@@ -3,6 +3,7 @@ import Spinner from "../../components/Spinner";
 import { useParams } from "react-router-dom";
 import { Trash2, Pencil } from "lucide-react";
 import Position from "../../components/Position";
+import VoterManagement from "../../components/VoterManagement";
 
 const ElectionDetails = () => {
   const { id } = useParams(); // get election id from URL
@@ -281,10 +282,25 @@ const ElectionDetails = () => {
       </div>
 
       <div className="flex flex-row p-4">
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-7'>
+          <div className=' col-span-1 md:col-span-2 lg:col-span-3'>
+              <Position/>
+          </div>
+
+              <div className=' col-span-1 md:col-span-2 lg:col-span-4'>
+                <VoterManagement/>
+              </div>
+
+          
+
+        </div>
        
 
-            <Position/>
+            
+            
       </div>
+
+      
 
       {/* Add/Edit Candidate Modal */}
       {isModalOpen && (
