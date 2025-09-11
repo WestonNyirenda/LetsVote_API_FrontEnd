@@ -12,6 +12,7 @@ import ElectionDetails from './pages/Admin/ElectionDetails'
 import Logout from './components/Auth/Logout'
 import WelcomePage from './pages/User/WelcomePage'
 import UserLayout  from './routes/UserLayout'
+import VotingPage from './pages/User/VotingPage'
 
 
 
@@ -97,8 +98,8 @@ const router = createBrowserRouter([
       element: <WelcomePage />
     },
     {
-      path: 'profile',
-      element: <h1>User Profile Page</h1>
+      path: 'VotingPage/:electionId',
+      element: <VotingPage/>
     },
     {
       path: 'settings',

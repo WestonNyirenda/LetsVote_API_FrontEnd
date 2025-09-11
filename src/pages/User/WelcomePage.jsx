@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
+import {Link} from 'react-router-dom'
 
 const WelcomePage = () => {
   const [elections, setElections] = useState([]);  
@@ -32,6 +33,7 @@ const WelcomePage = () => {
     (e) => e.id === users?.electionId
   );
 
+
   console.log("Filtered elections:", filteredData);
   return (
     <div className="min-h-screen bg-white py-8 px-4 sm:px-6 lg:px-6">
@@ -47,28 +49,73 @@ const WelcomePage = () => {
         <div className="lg:col-span-2 space-y-8">
           {/* User Status Card */}
           <div className="bg-white rounded-xl shadow-md p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-semibold text-blue-800">Election Information</h2>
-              
-              <span className="px-4 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">
-                Registered
-              </span>
-            </div>
-            <div className="space-y-4">
-              <div className="flex flex-col sm:flex-row">
-                <span className="text-gray-600 font-medium sm:w-40">Voter ID:</span>
-                <span className="font-semibold">123456789</span>
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-semibold text-blue-800">
+                    Election Information
+                  </h2>
+
+                  <span className="px-4 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800 hover:bg-green-200">
+                    <Link to={`/user/VotingPage/${users?.electionId}`}>
+                      Click to Start
+                    </Link> 
+                  </span>
+                </div>
+
+                {filteredData.map((e) => (
+                  <div
+                    key={e.id}
+                    className="mb-6 p-4 border border-gray-200 rounded-lg hover:shadow-md transition"
+                  >
+                    <span className='text-gray-600 font-medium'>
+                    Election Description: {e.description}
+                    </span>
+
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600 font-medium">Start Date:</span>
+                        <span className="text-gray-900">
+                          {new Date(e.startDate).toLocaleDateString("en-GB", {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                          })}
+                        </span>
+
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600 font-medium">End Date:</span>
+                        <span className="text-gray-900">
+                          {e.endDate
+                            ? new Date(e.endDate).toLocaleDateString("en-GB", {
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                            })
+                            : "Not specified"}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600 font-medium">Status:</span>
+                        <span
+                          className={`font-semibold px-2 py-0.5 rounded-full text-xs
+                            ${
+                              e.status === "Active"
+                                ? "bg-green-100 text-green-800"
+                                : e.status === "Planned"
+                                ? "bg-yellow-100 text-yellow-700"
+                                : e.status === "Completed"
+                                ? "bg-blue-100 text-blue-800"
+                                : "bg-red-100 text-red-800"
+                            }`}
+                        >
+                          {e.status}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <div className="flex flex-col sm:flex-row">
-                <span className="text-gray-600 font-medium sm:w-40">Location:</span>
-                <span className="font-semibold">Lilongwe, Malawi</span>
-              </div>
-              <div className="flex flex-col sm:flex-row">
-                <span className="text-gray-600 font-medium sm:w-40">Voting Status:</span>
-                <span className="font-semibold text-blue-600">Eligible to Vote</span>
-              </div>
-            </div>
-          </div>
+
 
           {/* Upcoming Elections */}
           <div className="bg-white rounded-xl shadow-md p-6">
@@ -144,23 +191,10 @@ const WelcomePage = () => {
             </div>
           </div>
 
-          {/* Announcements */}
-          <div className="bg-white rounded-xl shadow-md p-6">
-            <h2 className="text-2xl font-semibold text-blue-800 mb-6">Announcements</h2>
-            <div className="space-y-4">
-              <div className="border-l-4 border-blue-500 pl-4 py-2">
-                <h3 className="font-semibold text-gray-800">Registration Opens Soon</h3>
-                <p className="text-gray-600 text-sm my-2">Voter registration will begin on November 1, 2025.</p>
-                <span className="text-xs text-gray-500">October 10, 2025</span>
-              </div>
-              <div className="border-l-4 border-blue-500 pl-4 py-2">
-                <h3 className="font-semibold text-gray-800">Election Awareness Campaign</h3>
-                <p className="text-gray-600 text-sm my-2">Join our nationwide campaign to promote voting awareness.</p>
-                <span className="text-xs text-gray-500">October 15, 2025</span>
-              </div>
-            </div>
-          </div>
+        
         </div>
+
+        
       </div>
     </div>
   </div>
