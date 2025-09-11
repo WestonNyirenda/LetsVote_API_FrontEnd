@@ -30,15 +30,17 @@ const Signin = () => {
       console.log('Login successful:', data);
       console.log('JWT Token:', data.token);
 
+      localStorage.setItem("user", JSON.stringify(data));
       localStorage.setItem('token', data.token);
       localStorage.setItem('userName', data.userName);
       localStorage.setItem('role', data.role);
+      
 
       // Redirecting using navigate 
       if (data.role === 'Admin') {
         navigate('/Dashboard');
       } else if (data.role === 'User') {
-        navigate('/Dashboard');
+        navigate('/user');
       } else {
         navigate('/');
       }

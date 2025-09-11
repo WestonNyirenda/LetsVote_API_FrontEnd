@@ -9,6 +9,10 @@ import Layout from './routes/layout'
 import Candidates from './pages/Admin/Candidates'
 import Elections from './pages/Admin/Elections'
 import ElectionDetails from './pages/Admin/ElectionDetails'
+import Logout from './components/Auth/Logout'
+import WelcomePage from './pages/User/WelcomePage'
+import UserLayout  from './routes/UserLayout'
+
 
 
  //Protecting routes with authorization
@@ -78,7 +82,37 @@ const router = createBrowserRouter([
   {
     path:'ElectionDetails',
     element: <ElectionDetails/>
-  }
+  },
+
+ {
+  path: 'user',
+  element: (
+    <ProtectedRoute allowedRoles={['User']}>
+      <UserLayout />
+    </ProtectedRoute>
+  ),
+  children: [
+    {
+      index: true, // default route inside UserLayout
+      element: <WelcomePage />
+    },
+    {
+      path: 'profile',
+      element: <h1>User Profile Page</h1>
+    },
+    {
+      path: 'settings',
+      element: <h1>User Settings Page</h1>
+    }
+  ]
+},
+
+ 
+  {
+    path:'Logout',
+    element: <Logout/>
+  },
+  
 ])
 
 const App = () => {
