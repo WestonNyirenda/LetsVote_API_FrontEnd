@@ -28,7 +28,7 @@ const UserLayout = () => {
 
   return (
     <div>
-        <div className="min-h-screen bg-white transition-colors dark:bg-slate-950">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 transition-colors dark:bg-slate-950">
               <div className={cn("pointer-events-none fixed insert-0 -z-10 bg-black opacity-0 transition-opacity",
                 !collapsed && "max-md:pointer-events-auto max-md:z-50 max-md:opacity-30",
               )}/>

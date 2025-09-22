@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import Spinner from '../../components/Spinner'
+import Position from '../../components/Position';
 
 const VotingPage = () => {
   const [positions, setPositions] = useState([]);
@@ -20,6 +22,7 @@ const VotingPage = () => {
       .then((data) => {
         console.log(data);
         setPositions(data);
+
       })
       .catch((error) => {
         console.error("failed to load positions from db", error);
@@ -31,6 +34,7 @@ const VotingPage = () => {
     fetchPositions();
   }, []);
 
+ 
   const currentPosition = positions[currentPositionIndex];
   const isLastPosition = currentPositionIndex === positions.length - 1;
 
@@ -54,24 +58,52 @@ const VotingPage = () => {
   };
 
   const handleSubmitVote = () => {
+    const payload = 
+      {
+        electionId: electionIdd,
+        selectedCandidates: selectedCandidates
+      }
+      console.log(payload);
+      
+    fetch("http://localhost:5231/Api/Vote", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "Authorization" : `Bearer ${localStorage.getItem("token")}`
+      },
+      body: JSON.stringify(payload)
+    }).then((response) => {
+      if (!response.ok) throw new Error("Failed to submit vote");
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      alert("Vote submitted successfully!");
+    })
+    .catch((error) => {
+      console.error("Error submitting vote:", error);
+      alert("Failed to submit vote");
+    });
     console.log("Selected candidates:", selectedCandidates);
     alert("Vote submitted successfully!");
   };
 
   if (positions.length === 0) {
-    return <div className="text-center mt-10 text-gray-600">Loading positions...</div>;
+    return <div className="flex items-center justify-center text-teal-400 ">
+            <Spinner/>
+           </div>;
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
+       
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Cast Your Vote</h1>
           <p className="text-gray-600">Your voice matters. Select your preferred candidates for each position.</p>
         </div>
 
-        {/* Progress Bar */}
+      
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-gray-700">
@@ -89,7 +121,7 @@ const VotingPage = () => {
           </div>
         </div>
 
-        {/* Position Card */}
+       
         <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
           <div className="text-center mb-6">
             <h2 className="text-2xl font-semibold text-gray-800 mb-2">
@@ -98,7 +130,6 @@ const VotingPage = () => {
             <p className="text-gray-600">{currentPosition.description}</p>
           </div>
 
-          {/* Candidates Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {currentPosition.candidates.map((candidate) => {
               const candidateName = `${candidate.firstName} ${candidate.lastName}`;
@@ -150,7 +181,7 @@ const VotingPage = () => {
           </div>
         </div>
 
-        {/* Navigation Buttons */}
+       
         <div className="flex justify-between items-center">
           <button
             onClick={handlePrevious}
@@ -191,7 +222,7 @@ const VotingPage = () => {
           )}
         </div>
 
-        {/* Selected Candidates Summary */}
+        
         <div className="mt-8 bg-white rounded-xl shadow-lg p-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">Your Selections</h3>
           <div className="space-y-2">
