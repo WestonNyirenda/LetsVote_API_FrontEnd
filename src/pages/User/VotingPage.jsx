@@ -1,6 +1,8 @@
+import{useNavigate} from "react-router-dom"
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Spinner from "../../components/Spinner";
+import {toast} from 'react-toastify'
 
 const VotingPage = () => {
   const [positions, setPositions] = useState([]);
@@ -8,6 +10,8 @@ const VotingPage = () => {
   const [currentPositionIndex, setCurrentPositionIndex] = useState(0);
   const { electionId } = useParams();
   const electionIdd = parseInt(electionId);
+
+  const navigate = useNavigate();
 
   // Fetch positions for election
   const fetchPositions = () => {
@@ -38,7 +42,7 @@ const VotingPage = () => {
   const currentPosition = positions[currentPositionIndex];
   const isLastPosition = currentPositionIndex === positions.length - 1;
 
-  // Select candidate for the current position
+  // Selectinf candidate for the current position
   const handleCandidateSelect = (candidateId) => {
     setSelectedCandidates((prev) => {
       const existing = prev.find(
@@ -52,7 +56,7 @@ const VotingPage = () => {
             : c
         );
       } else {
-        // Add new choice
+        // Adding a new choice of candidaterr
         return [
           ...prev,
           { positionId: currentPosition.id, candidateId },
@@ -76,7 +80,7 @@ const VotingPage = () => {
   const handleSubmitVote = () => {
     const payload = {
       electionId: electionIdd,
-      selectedCandidates, // already in array format
+      selectedCandidates, 
     };
 
     console.log("Submitting payload:", payload);
@@ -90,16 +94,21 @@ const VotingPage = () => {
       body: JSON.stringify(payload),
     })
       .then((response) => {
-        if (!response.ok) throw new Error("Failed to submit vote");
-        return response.json();
+        if (!response.ok){
+          return response.json().then((errordata)=> {
+            toast.error(errordata.message);
+            
+          })
+        }
+        
       })
       .then((data) => {
         console.log(data);
-        alert("Vote submitted successfully!");
+        toast.success("Votted successfully");
       })
       .catch((error) => {
         console.error("Error submitting vote:", error);
-        alert("Failed to submit vote");
+        toast.error("Failed to submit vote");
       });
   };
 
@@ -115,10 +124,24 @@ const VotingPage = () => {
     selectedCandidates.find((c) => c.positionId === currentPosition.id)
       ?.candidateId;
 
+     
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
+
+      <div className="">
+        {/* Back button */}
+        <button
+          onClick={() => navigate("/user")} // goes back to previous page
+          className="mb-4 px-4 py-2 bg-teal-500 text-white rounded-lg shadow hover:bg-teal-600 transition"
+        >
+          ← Back
+        </button>
+
+        {/* Your other content like positions, candidates, etc. */}
+      </div>
+
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
+       
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">
             Cast Your Vote
@@ -129,13 +152,15 @@ const VotingPage = () => {
           </p>
         </div>
 
+        
+
         {/* Progress */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-gray-700">
               Position {currentPositionIndex + 1} of {positions.length}
             </span>
-            <span className="text-sm font-medium text-blue-600">
+            <span className="text-sm font-medium text-emerald-600">
               {Math.round(
                 ((currentPositionIndex + 1) / positions.length) * 100
               )}
@@ -144,7 +169,7 @@ const VotingPage = () => {
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div
-              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+              className="bg-emerald-500 h-2 rounded-full transition-all duration-300"
               style={{
                 width: `${
                   ((currentPositionIndex + 1) / positions.length) * 100
@@ -239,7 +264,7 @@ const VotingPage = () => {
               className={`px-8 py-2 rounded-lg font-medium ${
                 !selectedForCurrent
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-blue-600 text-white hover:bg-blue-700"
+                  : "bg-emerald-400 text-white hover:bg-emerald-500"
               }`}
             >
               Next Position

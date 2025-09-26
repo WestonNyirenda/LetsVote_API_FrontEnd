@@ -1,6 +1,8 @@
 import React from 'react'
 import { ThemeProvider } from './contexts/theme-context'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css";
 import Signin from './components/Auth/Signin'
 import DashboardPage from './routes/Dashboard/page'
 import { Navigate } from 'react-router-dom'
@@ -13,6 +15,7 @@ import Logout from './components/Auth/Logout'
 import WelcomePage from './pages/User/WelcomePage'
 import UserLayout  from './routes/UserLayout'
 import VotingPage from './pages/User/VotingPage'
+
 
 
 
@@ -118,8 +121,11 @@ const router = createBrowserRouter([
 
 const App = () => {
   return (
-    <ThemeProvider storageKey="theme">
-      <RouterProvider router={router} />
+     <ThemeProvider storageKey="theme">
+    
+        <RouterProvider router={router} />
+        <ToastContainer position="top-right" autoClose={3000} />
+ 
     </ThemeProvider>
   )
 }

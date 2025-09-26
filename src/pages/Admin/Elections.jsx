@@ -206,7 +206,7 @@ const Elections = () => {
                     Start Date
                   </label>
                   <input
-                    type="date"
+                    type="datetime-local"
                     name="startDate"
                     value={formData.startDate}
                     onChange={handleInputChange}
@@ -221,7 +221,7 @@ const Elections = () => {
                     End Date
                   </label>
                   <input
-                    type="date"
+                    type="datetime-local"
                     name="endDate"
                     value={formData.endDate}
                     onChange={handleInputChange}

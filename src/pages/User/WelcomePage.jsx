@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import {Link} from 'react-router-dom'
+import ElectionCountdown from '../../components/ElectionCountdown';
 
 const WelcomePage = () => {
   const [elections, setElections] = useState([]);  
@@ -33,16 +34,32 @@ const WelcomePage = () => {
     (e) => e.id === users?.electionId
   );
 
+  //
+  const now = new Date().getTime();
+  console.log("this is time", now);
+
 
   console.log("Filtered elections:", filteredData);
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4 sm:px-6 lg:px-6">
     <div className="max-w-6xl mx-auto">
       {/* Header Section */}
-      <div className="bg-gradient-to-r from-green-300 to-emerald-400 text-white py-10 px-6 rounded-xl mb-8 shadow-lg">
-        <h1 className="text-4xl font-bold mb-2">Welcome, {users.userName}</h1>
-        <p className="text-xl text-green-100">Your voice matters. Make it count.</p>
+      <div className="bg-gradient-to-r from-green-300 to-emerald-400 text-white flex justify-between items-center py-10 px-6 rounded-xl mb-8 shadow-lg">
+        <div>
+          <h1 className="text-4xl font-bold mb-2">Welcome, {users.userName}</h1>
+          <p className="text-xl text-green-100">Your voice matters. Make it count.</p>
+        </div>
+
+        {filteredData.map((e) => (
+          <div key={e.id}>
+            <ElectionCountdown 
+              startDate={e.startDate} 
+              endDate={e.endDate} 
+            />
+          </div>
+        ))}
       </div>
+
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column */}
@@ -55,10 +72,32 @@ const WelcomePage = () => {
                   </h2>
 
                   <span className="px-4 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800 hover:bg-green-200">
-                    <Link to={`/user/VotingPage/${users?.electionId}`}>
-                      Click to Start
-                    </Link> 
-                  </span>
+                      {filteredData.map((e) => {
+                        const now = new Date();                  // current time
+                        const start = new Date(e.startDate);     // convert string → Date
+                        const end = new Date(e.endDate);         // (optional if you also check end date)
+
+                        const hasStarted = now >= start;
+                        const hasEnded = now > end;
+
+                        return (
+                          hasStarted && !hasEnded ? (
+                            <Link 
+                              key={e.id} 
+                              to={`/user/VotingPage/${users?.electionId}`}
+                              className="text-blue-600 "
+                            >
+                              Click to Start
+                            </Link>
+                          ) : (
+                            <span key={e.id} className="cursor-not-allowed text-gray-400">
+                              Click to Start
+                            </span>
+                          )
+                        );
+                      })}
+                    </span>
+
                 </div>
 
                 {filteredData.map((e) => (
