@@ -158,32 +158,10 @@ const WelcomePage = () => {
 
           {/* Upcoming Elections */}
           <div className="bg-white rounded-xl shadow-md p-6">
-            <h2 className="text-2xl font-semibold text-blue-800 mb-6">Upcoming Elections</h2>
+            <h2 className="text-2xl font-semibold text-blue-800 mb-6">Elections Results</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="border border-gray-200 rounded-lg p-5 hover:shadow-md transition-shadow">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">Presidential Elections</h3>
-                <p className="text-gray-600 mb-4">December 10, 2025</p>
-                <div className="flex space-x-3">
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    View Details
-                  </button>
-                  <button className="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    Add to Calendar
-                  </button>
-                </div>
-              </div>
-              <div className="border border-gray-200 rounded-lg p-5 hover:shadow-md transition-shadow">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">Parliamentary Elections</h3>
-                <p className="text-gray-600 mb-4">January 15, 2026</p>
-                <div className="flex space-x-3">
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    View Details
-                  </button>
-                  <button className="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    Add to Calendar
-                  </button>
-                </div>
-              </div>
+              
+              
             </div>
           </div>
         </div>
@@ -200,7 +178,7 @@ const WelcomePage = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
                 </div>
-                <span className="font-medium">Vote Now</span>
+                <span className="font-medium">Election Details</span>
               </button>
               <button className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-blue-50 transition-colors">
                 <div className="bg-blue-100 p-3 rounded-full">
@@ -225,7 +203,7 @@ const WelcomePage = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                   </svg>
                 </div>
-                <span className="font-medium">Download Voter ID</span>
+                <span className="font-medium">Download Results</span>
               </button>
             </div>
           </div>

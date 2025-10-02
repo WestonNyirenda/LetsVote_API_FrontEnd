@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Plus, Users, Award, Pencil, Trash2 } from "lucide-react";
 import { useParams } from "react-router-dom";
+import {Tooltip} from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
+import {toast} from 'react-toastify'
+
 
 const Position = () => {
   const [positions, setPositions] = useState([]);
@@ -74,7 +78,12 @@ const Position = () => {
         body: JSON.stringify(postData),
       });
 
-      if (!response.ok) throw new Error("Failed to add position");
+      if (response.ok){
+        toast.success("Added Position successfully")
+      }else{
+        throw new Error("Failed to add position");
+        
+      };
 
       const newPosition = await response.json();
       setPositions((prev) => [...prev, newPosition]);
@@ -82,7 +91,8 @@ const Position = () => {
       resetForm();
     } catch (error) {
       console.error("Failed to add position", error);
-      alert("Failed to add position");
+      
+      toast.error("Failed to add position");
     }
   };
 
@@ -90,14 +100,19 @@ const Position = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      if (!formData.id) throw new Error("No ID provided for update");
+      if (!formData.id){
+          toast.error("No ID provided for update");
+          return;
+      } 
 
       const updateData = {
+        id: formData.id,
         name: formData.name,
         description: formData.description,
         electionId: formData.electionId,
       };
 
+      console.log(updateData);
       const response = await fetch(
         `http://localhost:5231/api/Position/${formData.id}`,
         {
@@ -107,13 +122,22 @@ const Position = () => {
         }
       );
 
-      if (!response.ok) throw new Error("Failed to update position");
+      if (response.ok){
+      
+        toast.success("Updated Position Successfully");
+        
+      }else{
+          toast.error("Failed to update position");
+          return;
+      }
 
       let updated = null;
-      if (response.status !== 204) {
-        updated = await response.json();
-      } else {
-        updated = { ...formData }; // fallback if backend returns NoContent
+
+        try {
+      updated = await response.json();
+      } catch {
+        // If backend sent plain text or no content
+        updated = { ...formData };
       }
 
       setPositions((prev) =>
@@ -123,7 +147,7 @@ const Position = () => {
       resetForm();
     } catch (error) {
       console.error("Update failed:", error);
-      alert("Failed to update position");
+      toast.error("Failed to update position");
     }
   };
 
@@ -169,20 +193,22 @@ const Position = () => {
             <div className="flex items-center gap-3">
               <Award className="w-6 h-6 text-teal-600" />
               <h2 className="text-2xl font-bold text-gray-800">Positions</h2>
-              <span className="bg-teal-100 text-teal-800 text-sm px-3 py-1 rounded-full font-medium">
-                {positions.length} positions
+              <span className="bg-amber-200 text-teal-800 text-sm px-3 py-1 mx-2 rounded-full font-medium">
+                {positions.length}
               </span>
             </div>
-            <button
+            <button data-tooltip-id = "positionTip"
               onClick={() => {
                 resetForm();
                 setIsPositionModalOpen(true);
               }}
               className="bg-teal-500 hover:bg-teal-600 text-white font-medium p-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2"
             >
-              <Plus className="w-5 h-5" />
-              Add Position
+              <Plus className="w-7 h-7" />
+            
+              
             </button>
+            <Tooltip id="positionTip" place="top" content="Add Position"  className="!text-white !px-3 !py-1 !rounded-lg !shadow-lg"/>
           </div>
         </div>
 
@@ -198,7 +224,7 @@ const Position = () => {
             positions.map((pos) => (
               <div
                 key={pos.id}
-                className="flex items-center justify-between p-4 mb-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-teal-200 transition-all duration-200"
+               n className="flex items-center justify-between p-4 mb-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-teal-200 transition-all duration-200"
               >
                 <div className="flex items-center gap-4">
                   <div className="w-9 h-9 bg-gradient-to-br from-teal-100 to-blue-100 rounded-lg flex items-center justify-center">
@@ -245,7 +271,7 @@ const Position = () => {
 
       {/* Modal */}
       {isPositionModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-100">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
             {/* Close */}
             <button
