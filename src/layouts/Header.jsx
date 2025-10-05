@@ -34,7 +34,7 @@ const Header = ({ collapsed, setCollapsed }) => {
         <button className='btn-ghost size-10' onClick={() => setCollapsed(!collapsed)}>
           <ChevronsLeft className={collapsed ? "rotate-180" : ""}/>
         </button>
-        <div className="input">
+        {/* <div className="input">
           <Search size={20} className='text-slate-300'/>
           <input 
             type="text" 
@@ -43,7 +43,7 @@ const Header = ({ collapsed, setCollapsed }) => {
             placeholder='search'
             className='w-full bg-transparent text-slate-900 outline-0 placeholder:text-slate-300 dark:text-white'
           />
-        </div>
+        </div> */}
       </div>
       
       <div className='flex items-center gap-x-3'>

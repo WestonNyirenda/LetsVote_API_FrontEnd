@@ -309,11 +309,20 @@ const Elections = () => {
                     <td className="px-4 py-3">{e.id}</td>
                     <td className="px-4 py-3">{e.description}</td>
                     <td className="px-4 py-3">
-                      {new Date(e.startDate).toLocaleDateString()}
+                      {new Date(e.startDate).toLocaleDateString("en-GB", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      })}
                     </td>
+
                     <td className="px-4 py-3">
                       {e.endDate
-                        ? new Date(e.endDate).toLocaleDateString()
+                        ? new Date(e.endDate).toLocaleDateString("en-Gb",{
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                        })
                         : "Ongoing"}
                     </td>
                     <td className="px-4 py-3">

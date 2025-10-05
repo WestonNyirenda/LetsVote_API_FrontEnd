@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Users, Search, Filter, Plus, Mail, Phone, MapPin } from 'lucide-react';
 import { useParams } from "react-router-dom";
+import {Tooltip} from "react-tooltip";
 
 const VoterManagement = () => {
   const [voters, setVoters] = useState([]);
@@ -43,10 +44,11 @@ const VoterManagement = () => {
       
         <div className="flex items-center justify-end">
           
-          <button className="bg-teal-400 hover:bg-teal-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
-            <Plus className="w-4 h-4" />
-            <span>Add Voter</span>
+          <button data-tooltip-id = "voterTip" className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
+            <Plus className="w-5 h-5" />
+            
           </button>
+           <Tooltip id="voterTip" place="top" content="Add Voter"  className="!text-white !px-3 !py-1 !rounded-lg !shadow-lg"/>
         </div>
      
 

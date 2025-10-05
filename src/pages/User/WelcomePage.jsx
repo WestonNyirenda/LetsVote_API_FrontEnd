@@ -90,9 +90,13 @@ const WelcomePage = () => {
                               Click to Start
                             </Link>
                           ) : (
-                            <span key={e.id} className="cursor-not-allowed text-gray-400">
+                            <Link 
+                              key={e.id} 
+                              to={`/user/VotingPage/${users?.electionId}`}
+                              className="text-blue-600 "
+                            >
                               Click to Start
-                            </span>
+                            </Link>
                           )
                         );
                       })}

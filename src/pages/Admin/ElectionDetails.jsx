@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Spinner from "../../components/Spinner";
 import { useParams } from "react-router-dom";
-import { Trash2, Pencil } from "lucide-react";
+import { Trash2, Pencil,Plus } from "lucide-react";
 import Position from "../../components/Position";
 import VoterManagement from "../../components/VoterManagement";
+import { toast } from "react-toastify";
+import {Tooltip} from "react-tooltip";
 
 const ElectionDetails = () => {
   const { id } = useParams();
@@ -18,6 +20,18 @@ const ElectionDetails = () => {
   const [editingCandidate, setEditingCandidate] = useState(null);
   const [submitting, setIsSubmitting] = useState(false);
   const [positions, setPositions] = useState(null);
+   const [votes, setVotes] = useState(null);
+    const [openPositions, setOpenPositions] = useState(new Set());
+
+     const togglePosition = (position) => {
+    const newOpen = new Set(openPositions);
+    if (newOpen.has(position)) {
+      newOpen.delete(position);
+    } else {
+      newOpen.add(position);
+    }
+    setOpenPositions(newOpen);
+  };
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -115,7 +129,8 @@ const ElectionDetails = () => {
         });
 
         if (!response.ok) throw new Error("Failed to add candidate");
-        alert("Candidate added successfully");
+        
+        toast.success("Candidate added successfully");
       }
 
       // Reset form
@@ -157,10 +172,11 @@ const ElectionDetails = () => {
       }
 
       setCandidates((prev) => prev.filter((e) => e.id !== id));
-      console.log("Candidate Deleted successfully");
+      
+      toast.success("Candidate Deleted successfully");
     } catch (Error) {
       console.error("Failed to delete candidate", Error);
-      alert("Failed to delete candidate. Check console for details.");
+      toast.error("Failed to delete candidate. Check console for details.");
     }
   };
 
@@ -180,6 +196,32 @@ const ElectionDetails = () => {
     fetchPositions();
   }, []);
 
+ // Fetching elections here
+
+  const fetchVotes = ()=>{
+    fetch(`http://localhost:5231/api/Vote/${electionId}`,{
+      method: "GET",
+      headers: {Accept: "Application/json"}
+    }).then((response) =>{
+      if(!response.ok){
+          // toast.error("Failed to fetch votes");
+          console.log('Failed to fetch votte data');
+          
+      }
+      return response.json();
+    }).then((data)=>{
+        console.log(data);
+        setVotes(data);
+    }).catch((error)=>{
+      console.error("Failed to fetch votes data", error);
+
+    })
+  }
+
+  useEffect(()=>{
+    fetchVotes();
+  },[]);
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b border-gray-200">
@@ -192,15 +234,15 @@ const ElectionDetails = () => {
         </div>
       )}
 
-      {/* Statistics and Candidates Section - Improved Layout */}
+      {/*  */}
       <div className="flex flex-col lg:flex-row gap-6 mb-6">
-        {/* Statistics Card */}
-        <div className="flex-1 min-w-0 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        {/* Statistics Card and ddaata */}
+        <div className="flex-1 min-w-0 bg-white rounded-xl shadow-sm border border-gray-200 p-6 ">
           <div className="text-lg font-semibold text-gray-800 mb-4">Statistics</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {/* Add your statistics cards here */}
+            {/* */}
             <div className="bg-blue-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-blue-600">0</div>
+              <div className="text-2xl font-bold text-blue-600">{votes != null ? votes.length: 0}</div>
               <div className="text-sm text-gray-600">Total Votes</div>
             </div>
             <div className="bg-green-50 rounded-lg p-4 text-center">
@@ -208,10 +250,107 @@ const ElectionDetails = () => {
               <div className="text-sm text-gray-600">Candidates</div>
             </div>
             <div className="bg-purple-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-purple-600">0</div>
+              <div className="text-2xl font-bold text-purple-600">{positions != null ? positions.length : 0}</div>
               <div className="text-sm text-gray-600">Positions</div>
             </div>
           </div>
+
+            {/* <div className="mt-4">
+      <h3 className="text-lg font-semibold text-gray-800 mb-4">Voting Summary</h3>
+      
+      {votes && votes.length > 0 ? (
+        <div className="space-y-2 max-w-2xl mx-auto max-h-[150px] overflow-y-auto">
+          {Array.from(new Set(votes.map(vote => vote.position.name))).map((position) => {
+            const positionVotes = votes.filter(vote => vote.position.name === position);
+            const candidateCounts = positionVotes.reduce((acc, vote) => {
+              const candidateName = `${vote.candidate.firstName} ${vote.candidate.lastName}`;
+              acc[candidateName] = (acc[candidateName] || 0) + 1;
+              return acc;
+            }, {});
+
+            const sortedCandidates = Object.entries(candidateCounts)
+              .sort(([,a], [,b]) => b - a);
+            const isOpen = openPositions.has(position);
+
+            return (
+              <div key={position} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <button
+                  onClick={() => togglePosition(position)}
+                  className="w-full px-6 py-4 text-left hover:bg-gray-50 transition-colors duration-200 flex justify-between items-center"
+                >
+                  <div className="flex items-center space-x-4">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <span className="text-blue-600 font-semibold text-sm">
+                        {positionVotes.length}
+                      </span>
+                    </div>
+                    <h4 className="font-semibold text-gray-900 text-lg">{position}</h4>
+                  </div>
+                  <svg
+                    className={`w-5 h-5 text-gray-500 transform transition-transform duration-200 ${
+                      isOpen ? 'rotate-180' : ''
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                
+                <div className={`transition-all duration-300 ease-in-out ${
+                  isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                } overflow-hidden`}>
+                  <div className="px-6 pb-4 pt-2 border-t border-gray-100">
+                    <div className="space-y-3">
+                      {sortedCandidates.map(([candidate, count], index) => {
+                        const percentage = (count / positionVotes.length) * 100;
+                        return (
+                          <div key={candidate} className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg">
+                            <div className="flex items-center space-x-3">
+                              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                                index === 0 
+                                  ? 'bg-green-500 text-white' 
+                                  : index === 1 
+                                  ? 'bg-blue-500 text-white'
+                                  : index === 2
+                                  ? 'bg-purple-500 text-white'
+                                  : 'bg-gray-400 text-white'
+                              }`}>
+                                {index + 1}
+                              </div>
+                              <span className="font-medium text-gray-700">{candidate}</span>
+                            </div>
+                            <div className="flex items-center space-x-4">
+                              <div className="w-24 bg-gray-200 rounded-full h-2">
+                                <div 
+                                  className="bg-blue-500 h-2 rounded-full transition-all duration-500"
+                                  style={{ width: `${percentage}%` }}
+                                ></div>
+                              </div>
+                              <div className="text-right min-w-20">
+                                <span className="font-semibold text-gray-900">{count}</span>
+                                <span className="text-sm text-gray-500 ml-1">
+                                  ({percentage.toFixed(1)}%)
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="text-center py-12 bg-gray-50 rounded-lg">
+          <p className="text-gray-500">No voting data available</p>
+        </div>
+      )}
+    </div> */}
         </div>
 
         {/* Candidates Card */}
@@ -219,7 +358,7 @@ const ElectionDetails = () => {
           <div className="p-4 border-b border-gray-200">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <h3 className="text-lg font-semibold text-gray-800">Candidates</h3>
-              <button
+              <button data-tooltip-id = "candidateTip"
                 onClick={() => {
                   setIsModalOpen(true);
                   setEditingCandidate(null);
@@ -235,8 +374,9 @@ const ElectionDetails = () => {
                 }}
                 className="bg-teal-500 hover:bg-teal-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 whitespace-nowrap"
               >
-                Add Candidate
+               <Plus className="w-5 h-5" />
               </button>
+              <Tooltip id="candidateTip" place="top" content="Add Candidate"  className="!text-white !px-3 !py-1 !rounded-lg !shadow-lg"/>
             </div>
           </div>
 
@@ -298,7 +438,7 @@ const ElectionDetails = () => {
 
       {/* Add/Edit Candidate Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-100">
           <div className="bg-white rounded-xl shadow-lg w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
@@ -439,7 +579,7 @@ const ElectionDetails = () => {
 
       {/* View Candidate Modal */}
       {isViewModalOpen && selectedCandidate && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-100">
           <div className="bg-white rounded-xl shadow-lg w-full max-w-md mx-4">
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">

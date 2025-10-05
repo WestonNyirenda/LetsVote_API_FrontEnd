@@ -3,7 +3,8 @@ import { Plus, Users, Award, Pencil, Trash2 } from "lucide-react";
 import { useParams } from "react-router-dom";
 import {Tooltip} from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
-import {toast} from 'react-toastify'
+import {toast} from 'react-toastify';
+
 
 
 const Position = () => {
@@ -264,9 +265,9 @@ const Position = () => {
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-gray-100 bg-gray-50 text-center text-sm text-gray-600">
+        {/* <div className="p-4 border-t border-gray-100 bg-gray-50 text-center text-sm text-gray-600">
           Manage election positions and their candidates zoona izi
-        </div>
+        </div> */}
       </div>
 
       {/* Modal */}

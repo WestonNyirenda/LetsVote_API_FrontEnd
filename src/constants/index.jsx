@@ -30,21 +30,21 @@ export const navbarLinks = [
       },
     ],
   },
-  {
-    title: "Results",
-    links: [
-      {
-        label: "Stock",
-        icon: Package,
-        path: "/stock",
-      },
-      {
-        label: "New Item",
-        icon: PackagePlus,
-        path: "/items/new",
-      },
-    ],
-  },
+  // {
+  //   title: "Results",
+  //   links: [
+  //     {
+  //       label: "Stock",
+  //       icon: Package,
+  //       path: "/stock",
+  //     },
+  //     {
+  //       label: "New Item",
+  //       icon: PackagePlus,
+  //       path: "/items/new",
+  //     },
+  //   ],
+  // },
   {
     title: "Settings",
     links: [

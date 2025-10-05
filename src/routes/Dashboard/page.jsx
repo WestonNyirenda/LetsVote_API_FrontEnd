@@ -28,11 +28,11 @@ const Page = () => {
             <div className='w-fit rounded-lg bg-blue-500/20 p-2 text-blue-500 transition-colors dark:bg-blue-600/20 dark:text-blue-600'>
               <Package size={26} />
             </div>
-            <p className='card-title'>Total Votes</p>
+            <p className='card-title'>Total Elections</p>
           </div>
 
           <div className='card-body bg-slate-100 transition-colors dark:bg-slate-950'>
-            <p className='text-3xl font-bold text-slate-900 transition-colors dark:text-slate-50'>1209</p>
+            <p className='text-3xl font-bold text-slate-900 transition-colors dark:text-slate-50'>9</p>
             <span className='flex w-fit items-center gap-x-2 rounded-full border border-blue-500 px-2 py-1 font-medium text-blue-500 dark:bg-blue-600 dark:text-slate-600 dark:border-blue-600'>
               <TrendingUp size={18} />
               +5%
@@ -45,11 +45,11 @@ const Page = () => {
             <div className='w-fit rounded-lg bg-blue-500/20 p-2 text-blue-500 transition-colors dark:bg-blue-600/20 dark:text-blue-600'>
               <User size={26} />
             </div>
-            <p className='card-title'>Registered Voters</p>
+            <p className='card-title'>Active Elections</p>
           </div>
 
           <div className='card-body bg-slate-100 transition-colors dark:bg-slate-950'>
-            <p className='text-3xl font-bold text-slate-900 transition-colors dark:text-slate-50'>1209</p>
+            <p className='text-3xl font-bold text-slate-900 transition-colors dark:text-slate-50'>3</p>
             <span className='flex w-fit items-center gap-x-2 rounded-full border border-blue-500 px-2 py-1 font-medium text-blue-500 dark:bg-blue-600 dark:text-slate-600 dark:border-blue-600'>
            
               
@@ -62,11 +62,11 @@ const Page = () => {
             <div className='w-fit rounded-lg bg-blue-500/20 p-2 text-blue-500 transition-colors dark:bg-blue-600/20 dark:text-blue-600'>
               < BadgeCheck size={26} />
             </div>
-            <p className='card-title'>Total Candidates</p>
+            <p className='card-title'>Closed Elections</p>
           </div>
 
           <div className='card-body bg-slate-100 transition-colors dark:bg-slate-950'>
-            <p className='text-3xl font-bold text-slate-900 transition-colors dark:text-slate-50'>1209</p>
+            <p className='text-3xl font-bold text-slate-900 transition-colors dark:text-slate-50'>1</p>
             <span className='flex w-fit items-center gap-x-2 rounded-full border border-blue-500 px-2 py-1 font-medium text-blue-500 dark:bg-blue-600 dark:text-slate-600 dark:border-blue-600'>
          
              
@@ -83,7 +83,7 @@ const Page = () => {
           </div>
 
           <div className='card-body bg-slate-100 transition-colors dark:bg-slate-950'>
-            <p className='text-3xl font-bold text-slate-900 transition-colors dark:text-slate-50'>1209</p>
+            <p className='text-3xl font-bold text-slate-900 transition-colors dark:text-slate-50'>120</p>
             <span className='flex w-fit items-center gap-x-2 rounded-full border border-blue-500 px-2 py-1 font-medium text-blue-500 dark:bg-blue-600 dark:text-slate-600 dark:border-blue-600'>
               
             
@@ -146,7 +146,7 @@ const Page = () => {
 
         </div>
         <div className='card col-span-1 md:col-span-2 lg:col-span-3'>
-          <div className='card-header'> Candidates</div>
+          <div className='card-header'> Elections</div>
           <div className='card-body p-0 h-[300px] overflow-auto p-0'>
             {Candidates.map((sale)=>(
                 <div key={sale.id} className='flex items-center justify-between gap-x-4 pr-2'>
