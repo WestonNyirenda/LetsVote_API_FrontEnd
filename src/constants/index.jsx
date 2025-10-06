@@ -19,9 +19,9 @@ export const navbarLinks = [
         path: "/Dashboard/Elections",
       },
       {
-        label: "Candidates",
+        label: "Voters",
         icon: ChartColumn,
-        path: "/Dashboard/Candidates",
+        path: "/Dashboard/Voters",
       },
       {
         label: "Reports",
@@ -30,21 +30,21 @@ export const navbarLinks = [
       },
     ],
   },
-  // {
-  //   title: "Results",
-  //   links: [
-  //     {
-  //       label: "Stock",
-  //       icon: Package,
-  //       path: "/stock",
-  //     },
-  //     {
-  //       label: "New Item",
-  //       icon: PackagePlus,
-  //       path: "/items/new",
-  //     },
-  //   ],
-  // },
+  {
+    title: "Results",
+    links: [
+      {
+        label: "Summary",
+        icon: Package,
+        path: "/stock",
+      },
+      // {
+      //   label: "New Item",
+      //   icon: PackagePlus,
+      //   path: "/items/new",
+      // },
+    ],
+  },
   {
     title: "Settings",
     links: [

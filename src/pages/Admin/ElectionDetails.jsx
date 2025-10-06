@@ -36,7 +36,7 @@ const ElectionDetails = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    age: "",
+    dateOfBirth: "",
     description: "",
     electionId: electionId,
     positionId: "",
@@ -98,7 +98,7 @@ const ElectionDetails = () => {
       }
       formDataToSend.append("firstName", formData.firstName);
       formDataToSend.append("lastName", formData.lastName);
-      formDataToSend.append("age", formData.age);
+      formDataToSend.append("dateOfBirth", formData.dateOfBirth);
       formDataToSend.append("description", formData.description);
       formDataToSend.append("electionId", formData.electionId);
       formDataToSend.append("positionId", formData.positionId);
@@ -137,7 +137,7 @@ const ElectionDetails = () => {
       setFormData({
         firstName: "",
         lastName: "",
-        age: "",
+        dateOfBirth: "",
         description: "",
         electionId: electionId,
         positionId: "",
@@ -365,7 +365,7 @@ const ElectionDetails = () => {
                   setFormData({
                     firstName: "",
                     lastName: "",
-                    age: "",
+                    dateOfBirth: "",
                     description: "",
                     electionId: electionId,
                     positionId: "",
@@ -489,14 +489,14 @@ const ElectionDetails = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Age
+                    Date Of Birth
                   </label>
                   <input
-                    type="number"
-                    name="age"
-                    value={formData.age}
+                    type="date"
+                    name="dateOfBirth"
+                    value={formData.dateOfBirth}
                     onChange={handleInputChange}
-                    min="18"
+                    min="15"
                     required
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-teal-400 focus:border-transparent"
                   />
@@ -611,7 +611,7 @@ const ElectionDetails = () => {
                   
                   <div>
                     <label className="text-sm font-medium text-gray-600">Age</label>
-                    <p className="text-gray-900">{selectedCandidate.age}</p>
+                    <p className="text-gray-900">{selectedCandidate.dateOfBirth}</p>
                   </div>
                   
                   <div>
@@ -645,7 +645,7 @@ const ElectionDetails = () => {
                       setFormData({
                         firstName: selectedCandidate.firstName,
                         lastName: selectedCandidate.lastName,
-                        age: selectedCandidate.age,
+                        dateOfBirth: selectedCandidate.dateOfBirth,
                         description: selectedCandidate.description,
                         electionId: selectedCandidate.electionId,
                         positionId: selectedCandidate.positionId || "",
