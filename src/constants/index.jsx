@@ -36,7 +36,7 @@ export const navbarLinks = [
       {
         label: "Summary",
         icon: Package,
-        path: "/stock",
+        path: "/Summary",
       },
       // {
       //   label: "New Item",

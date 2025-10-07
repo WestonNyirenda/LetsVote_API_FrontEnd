@@ -9,6 +9,7 @@ import { Navigate } from 'react-router-dom'
 import Unauthorized from './components/Auth/unauthorized'
 import Layout from './routes/layout'
 import Candidates from './pages/Admin/Candidates'
+import Voters from './pages/Admin/Voters'
 import Elections from './pages/Admin/Elections'
 import ElectionDetails from './pages/Admin/ElectionDetails'
 import Logout from './components/Auth/Logout'
@@ -60,8 +61,8 @@ const router = createBrowserRouter([
         element: <DashboardPage />,
       },
       {
-        path: 'Candidates',
-        element: <Candidates/>,
+        path: 'Voters',
+        element: <Voters/>,
       },
        {
         path: 'Elections',
