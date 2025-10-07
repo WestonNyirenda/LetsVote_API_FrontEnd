@@ -5,6 +5,14 @@ const Voters = () => {
   const [voters, setVoters] = useState([]);
   const [elections, setElections] = useState([]);
   const [selectedElectionId, setSelectedElectionId] = useState('1');
+  const [isVoterModalOpen, setIsVoterModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    electionId: ""
+  })
   const [candidates, setCandidates] = useState([
     { id: 1, name: 'John Smith', party: 'Democratic', votes: 1250, status: 'Active', age: 45 },
     { id: 2, name: 'Sarah Johnson', party: 'Republican', votes: 980, status: 'Active', age: 38 },
@@ -21,7 +29,7 @@ const Voters = () => {
     candidate.party.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // ✅ Fetch voters based on selected election
+
   const handleFetchVoters = (electionId) => {
     fetch(`http://localhost:5231/api/account/electionId?electionId=${electionId}`, {
       method: 'GET',
@@ -85,6 +93,7 @@ const Voters = () => {
   };
 
   return (
+    <>
     <div className="min-h-screen bg-gray-50 p-6">
       {/* Header */}
       <div className="mb-8">
@@ -128,7 +137,7 @@ const Voters = () => {
             </select>
             <button
               className="flex items-center gap-2 px-4 py-2 bg-teal-400 hover:bg-teal-500 text-white rounded-lg"
-              onClick={() => setShowModal(true)}
+              onClick={() => setIsVoterModalOpen(true)}
             >
               <Plus className="h-4 w-4" />
               Add Candidate
@@ -196,6 +205,127 @@ const Voters = () => {
         ))}
       </div>
     </div>
+    
+    {isVoterModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-100">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
+            {/* Close */}
+            <button
+              onClick={() => setIsVoterModalOpen(false)}
+              type="button"
+              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+            >
+              ✕
+            </button>
+
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">
+              Add Position
+            </h3>
+
+            <form className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    First Name
+                  </label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    placeholder="Enter first name"
+                    required
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    placeholder="Enter last name"
+                    required
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                  />
+                </div>
+              </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                placeholder="Enter your email"
+                required
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                placeholder="Enter your password"
+                required
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+              />
+            </div>
+
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Select Election to voter belongs
+                </label>
+                <select
+                  name="electionId"
+                  value={formData.electionId}
+                  onChange={(e) =>
+                    setFormData({ ...formData, electionId: e.target.value })
+                  }
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                >
+                  <option value="">Select Election</option>
+                  {elections.map((election) => (
+                    <option key={election.id} value={election.id}>
+                      {election.description}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+
+              <div className="flex justify-end gap-2 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setIsVoterModalOpen(false)}
+                  className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600"
+                >
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+
+</>
   );
 };
 
