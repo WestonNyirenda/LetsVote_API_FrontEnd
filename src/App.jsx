@@ -16,6 +16,7 @@ import Logout from './components/Auth/Logout'
 import WelcomePage from './pages/User/WelcomePage'
 import UserLayout  from './routes/UserLayout'
 import VotingPage from './pages/User/VotingPage'
+import Summary from './pages/Admin/Summary'
 
 
 
@@ -79,6 +80,29 @@ const router = createBrowserRouter([
       },
     ],
   },
+
+  {
+    path: 'Summary',
+    element: ( 
+
+      <ProtectedRoute allowedRoles={['Admin']}>
+        <Layout />
+      </ProtectedRoute>
+      
+    ),
+    children: [
+     
+      {
+        path: 'Summary',
+        element: <Summary/>,
+      },
+      {
+        path: 'Elections',
+        element: <Elections/>,
+      },
+    ],
+  },
+
   {
     path: '/Unauthorized', 
     element: <Unauthorized />

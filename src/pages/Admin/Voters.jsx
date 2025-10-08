@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Plus, Edit, Trash2, Search, Filter, User, Award } from 'lucide-react';
+import{toast} from "react-toastify"
 
 const Voters = () => {
   const [voters, setVoters] = useState([]);
@@ -13,21 +14,70 @@ const Voters = () => {
     password: "",
     electionId: ""
   })
-  const [candidates, setCandidates] = useState([
-    { id: 1, name: 'John Smith', party: 'Democratic', votes: 1250, status: 'Active', age: 45 },
-    { id: 2, name: 'Sarah Johnson', party: 'Republican', votes: 980, status: 'Active', age: 38 },
-    { id: 3, name: 'Mike Chen', party: 'Independent', votes: 320, status: 'Inactive', age: 42 },
-  ]);
+  
+  const resetForm = () =>{
+    setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        electionId: ""
+    })
+ 
+  }
 
+  
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleAddVoter= (e)=>{
+    e.preventDefault();
+
+    try{
+      fetch("http://localhost:5231/api/account/register",{
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "content-type":"application/json",
+        },
+        body: JSON.stringify(formData)
+
+      }).then((response)=>{
+        
+        if(response.ok){
+          toast.success("Added Voter Successfully");
+          resetForm();
+          setIsVoterModalOpen(false);
+          handleFetchVoters(selectedElectionId);
+
+        }else{
+          // toast.error("Error: failed to add Voter");
+           const errorData =  response.json();
+        toast.error(`Failed to add voter: ${errorData.message || 'Unknown error'}`);
+        }
+        
+      })
+    }catch(error){
+      toast.error(`Error: ${error.message}`);
+
+    }
+  }
+ 
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingCandidate, setEditingCandidate] = useState(null);
 
-  // Dummy candidate search logic (kept for UI)
-  const filteredCandidates = candidates.filter(candidate =>
-    candidate.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    candidate.party.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredVoters = voters.filter(voter =>
+  voter.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  voter.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  voter.email.toLowerCase().includes(searchTerm.toLowerCase())
+);
+
 
 
   const handleFetchVoters = (electionId) => {
@@ -148,7 +198,7 @@ const Voters = () => {
 
       {/* Voters List */}
       <div className="space-y-3">
-        {voters.map((voter) => (
+        {filteredVoters.length > 0 ? (filteredVoters.map((voter) => (
           <div
             key={voter.id}
             className="bg-white rounded-lg border border-gray-200 p-4 hover:border-gray-300 transition-colors"
@@ -202,97 +252,84 @@ const Voters = () => {
               </div>
             </div>
           </div>
-        ))}
+        ))):  (
+          <p className="text-gray-500 text-sm">No voters found.</p>
+          )}
       </div>
     </div>
     
     {isVoterModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-100">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
-            {/* Close */}
             <button
               onClick={() => setIsVoterModalOpen(false)}
-              type="button"
               className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
             >
               ✕
             </button>
 
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Add Position
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Add Voter</h3>
 
-            <form className="space-y-4">
+            <form onSubmit={handleAddVoter} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    First Name
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
                   <input
                     type="text"
                     name="firstName"
                     value={formData.firstName}
-                    placeholder="Enter first name"
+                    onChange={handleInputChange}
                     required
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Last Name
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
                   <input
                     type="text"
                     name="lastName"
                     value={formData.lastName}
-                    placeholder="Enter last name"
+                    onChange={handleInputChange}
                     required
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                   />
                 </div>
               </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                placeholder="Enter your email"
-                required
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-teal-400 focus:border-transparent"
-              />
-            </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                />
+              </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                placeholder="Enter your password"
-                required
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-teal-400 focus:border-transparent"
-              />
-            </div>
-
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                />
+              </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Select Election to voter belongs
+                  Select Election
                 </label>
                 <select
                   name="electionId"
                   value={formData.electionId}
-                  onChange={(e) =>
-                    setFormData({ ...formData, electionId: e.target.value })
-                  }
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                  onChange={handleInputChange}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                 >
                   <option value="">Select Election</option>
                   {elections.map((election) => (
@@ -302,7 +339,6 @@ const Voters = () => {
                   ))}
                 </select>
               </div>
-
 
               <div className="flex justify-end gap-2 mt-6">
                 <button

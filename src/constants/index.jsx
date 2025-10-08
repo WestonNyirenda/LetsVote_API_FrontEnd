@@ -1,5 +1,5 @@
 // src/navigation/index.jsx or wherever you're putting it
-import { ChartColumn, ChartNoAxesColumnIncreasing, Home, NotepadText, Package, PackagePlus, Settings, LogOut } from "lucide-react";
+import { ChartColumn, ChartNoAxesColumnIncreasing, Home, NotepadText, Package, PackagePlus, Settings, LogOut, FileText } from "lucide-react";
 import profile from '../assets/profile.png'
 
 
@@ -35,7 +35,7 @@ export const navbarLinks = [
     links: [
       {
         label: "Summary",
-        icon: Package,
+        icon: FileText,
         path: "/Summary",
       },
       // {
