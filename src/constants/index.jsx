@@ -24,27 +24,32 @@ export const navbarLinks = [
         path: "/Dashboard/Voters",
       },
       {
+        label: "Summary",
+        icon: FileText,
+        path: "/Dashboard/Summary",
+      },
+      {
         label: "Reports",
         icon: NotepadText,
         path: "/reports",
       },
     ],
   },
-  {
-    title: "Results",
-    links: [
-      {
-        label: "Summary",
-        icon: FileText,
-        path: "/Summary",
-      },
-      // {
-      //   label: "New Item",
-      //   icon: PackagePlus,
-      //   path: "/items/new",
-      // },
-    ],
-  },
+  // {
+  //   title: "Results",
+  //   links: [
+  //     {
+  //       label: "Summary",
+  //       icon: FileText,
+  //       path: "/Summary",
+  //     },
+  //     // {
+  //     //   label: "New Item",
+  //     //   icon: PackagePlus,
+  //     //   path: "/items/new",
+  //     // },
+  //   ],
+  // },
   {
     title: "Settings",
     links: [

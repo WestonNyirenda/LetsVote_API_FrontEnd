@@ -78,6 +78,11 @@ const router = createBrowserRouter([
         path: 'Customers',
         element: <h1 className="title">Customers</h1>,
       },
+
+      {
+         path: 'Summary',
+        element: <Summary/>,
+      }
     ],
   },
 

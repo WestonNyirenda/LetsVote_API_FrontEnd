@@ -100,7 +100,7 @@ const Voters = () => {
       });
   };
 
-  // ✅ Fetch election list
+  //  Fetch election list
   const handleFetchElections = () => {
     fetch('http://localhost:5231/api/Election', {
       method: 'GET',
@@ -121,12 +121,12 @@ const Voters = () => {
       });
   };
 
-  // Fetch all elections once
+ 
   useEffect(() => {
     handleFetchElections();
   }, []);
 
-  // Fetch voters whenever selected election changes
+  // Fetching voters herewhenever selected election changes
   useEffect(() => {
     if (selectedElectionId) {
       handleFetchVoters(selectedElectionId);
