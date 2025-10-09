@@ -100,7 +100,7 @@ const Voters = () => {
       });
   };
 
-  //  Fetch election list
+
   const handleFetchElections = () => {
     fetch('http://localhost:5231/api/Election', {
       method: 'GET',
