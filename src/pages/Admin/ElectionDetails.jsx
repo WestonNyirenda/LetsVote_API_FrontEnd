@@ -242,15 +242,15 @@ const ElectionDetails = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* */}
             <div className="bg-blue-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-blue-600">{votes.length > 0 ? votes.length: 0}</div>
+              <div className="text-2xl font-bold text-blue-600">{votes != null ? votes.length: 0}</div>
               <div className="text-sm text-gray-600">Total Votes</div>
             </div>
             <div className="bg-green-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-green-600">{electionCandidates.length}</div>
+              <div className="text-2xl font-bold text-green-600">{electionCandidates !=  null ? electionCandidates.length : 0 }</div>
               <div className="text-sm text-gray-600">Candidates</div>
             </div>
             <div className="bg-purple-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-purple-600">{positions.length > 0 ? positions.length : 0}</div>
+              <div className="text-2xl font-bold text-purple-600">{positions !=  null ? positions.length : 0}</div>
               <div className="text-sm text-gray-600">Positions</div>
             </div>
           </div>

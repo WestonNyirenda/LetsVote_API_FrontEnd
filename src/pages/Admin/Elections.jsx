@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Pencil, Trash2, Eye } from 'lucide-react';
 import Spinner from "../../components/Spinner";
 import {Link} from "react-router-dom"
+import {toast} from "react-toastify"
 
 const Elections = () => {
   const [elections, setElections] = useState([]); //saving elections in an array here for Get
@@ -10,8 +11,10 @@ const Elections = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [editingElection, setEditingElection] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [electionStatus, setElectionStatus] = useState([]);
 
   const [formData, setFormData] = useState({
+    electionName: "",
     description: "",
     startDate: "",
     endDate: "",
@@ -21,6 +24,7 @@ const Elections = () => {
 
   const resetForm = () => {
     setFormData({
+      electionName: "",
       description: "",
       startDate: "",
       endDate: "",
@@ -85,20 +89,22 @@ const Elections = () => {
     });
   };
 
-  const preparePayload = () => {
-    return {
-      id: isEditMode ? editingElection.id : undefined,
-      description: formData.description,
-      startDate: formData.startDate
-        ? new Date(formData.startDate).toISOString()
-        : null,
-      endDate: formData.endDate
-        ? new Date(formData.endDate).toISOString()
-        : null,
-      status: formData.status !== "" ? parseInt(formData.status) : null,
-      isPublic: formData.isPublic
+    const preparePayload = () => {
+      return {
+        id: isEditMode ? editingElection.id : undefined,
+        electionName: formData.electionName,
+        description: formData.description,
+        startDate: formData.startDate
+          ? new Date(formData.startDate).toISOString()
+          : null,
+        endDate: formData.endDate
+          ? new Date(formData.endDate).toISOString()
+          : null,
+        status: formData.status !== "" ? formData.status : "Pending",
+        isPublic: formData.isPublic
+      };
     };
-  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -138,10 +144,12 @@ const Elections = () => {
           election.id === editingElection.id ? { ...election, ...payload } : election
         ));
         console.log("Election updated successfully");
+        toast.success("Election updated successfully");
       } else {
         const newElection = await response.json();
         console.log("Election created successfully:", newElection);
         setElections((prev) => [...prev, newElection]);
+        toast.success("Election updated successfully");
       }
 
       resetForm();
@@ -153,6 +161,32 @@ const Elections = () => {
       setIsSubmitting(false);
     }
   };
+
+  //fetching election status onlly here s
+
+  const handleFetchElectionStatus = () => {
+    fetch("http://localhost:5231/api/Election/statuses", {
+        method: "GET",
+        headers: { Accept: "application/json" }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Failed to fetch election statuses");
+        }
+        return response.json();
+    })
+    .then(data => {
+        setElectionStatus(data);
+        console.log("Election statuses:", data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+};
+
+useEffect(() => {
+    handleFetchElectionStatus();
+}, []);
 
   if (loading) {
     return (
@@ -184,6 +218,22 @@ const Elections = () => {
                 <h5 className="text-lg font-semibold text-center">
                   {isEditMode ? "Edit Election" : "Create New Election"}
                 </h5>
+
+                 <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Election Name
+                  </label>
+                  <input
+                    type="text"
+                    name="electionName"
+                    value={formData.electionName}
+                    onChange={handleInputChange}
+                    className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm 
+                              focus:border-teal-500 focus:ring-teal-500 sm:text-sm p-2"
+                    placeholder="Enter election name"
+                    required
+                  />
+                </div>
 
                 <div>
                   <label className="block text-sm font-medium mb-1">
@@ -232,7 +282,8 @@ const Elections = () => {
 
                 <div>
                   <label className="block text-sm font-medium mb-1">Status</label>
-                  <select
+                 
+                  <select 
                     name="status"
                     value={formData.status}
                     onChange={handleInputChange}
@@ -240,11 +291,13 @@ const Elections = () => {
                     className="w-full rounded-md border border-gray-300 shadow-sm 
                               focus:border-teal-500 focus:ring-teal-500 p-2"
                   >
-                    <option value="">Select status</option>
-                    <option value="0">Planned</option>
-                    <option value="1">Active</option>
-                    <option value="2">Completed</option>
-                    <option value="3">Cancelled</option>
+                  
+                  {electionStatus.map((status) => (
+
+                      <option key={status.Id} value={status.Id}>{status.name}</option>
+                  ))}
+                    
+                  
                   </select>
                 </div>
 
@@ -325,11 +378,25 @@ const Elections = () => {
                         })
                         : "Ongoing"}
                     </td>
-                    <td className="px-4 py-3">
-                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                        {["Planned", "Active", "Completed", "Cancelled"][e.status]}
-                      </span>
-                    </td>
+                   <td className="px-4 py-3">
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-medium 
+                            ${
+                              e.status === "Active"
+                                ? "bg-green-100 text-green-700"
+                                : e.status === "Pending"
+                                ? "bg-amber-100 text-amber-700"
+                                : e.status === "Cancelled"
+                                ? "bg-red-100 text-red-700"
+                                : e.status === "Completed"
+                                ? "bg-blue-100 text-blue-700"
+                                : "bg-gray-100 text-gray-700"
+                            }`}
+                        >
+                          {e.status}
+                        </span>
+                      </td>
+
                     <td className="px-4 py-3">
                       {e.isPublic ? (
                         <span className="text-green-600 font-medium">Yes</span>
@@ -345,6 +412,7 @@ const Elections = () => {
                             setEditingElection(e);
                             setIsEditMode(true);
                             setFormData({
+                              electionName:e.electionName,
                               description: e.description,
                               startDate: e.startDate.split("T")[0],
                               endDate: e.endDate ? e.endDate.split("T")[0] : "",

@@ -39,24 +39,36 @@ const Summary = () => {
     }, [])
 
     // Fetching votes here
-    const fetchVotes = (selectedElectionId) => {
-        if (!selectedElectionId) return;
-        
-        fetch(`http://localhost:5231/api/Vote/${selectedElectionId}`, {
-            method: "GET",
-            headers: { Accept: "Application/json" }
-        }).then((response) => {
-            if (!response.ok) {
-                console.log('Failed to fetch vote data');
-            }
-            return response.json();
-        }).then((data) => {
-            console.log('Votes data:', data);
-            setVotes(data);
-        }).catch((error) => {
-            console.error("Failed to fetch votes data", error);
-        })
-    }
+const fetchVotes = (selectedElectionId) => {
+  if (!selectedElectionId) return;
+
+  fetch(`http://localhost:5231/api/Vote/${selectedElectionId}`, {
+    method: "GET",
+    headers: { Accept: "application/json" },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        console.log("Failed to fetch vote data");
+        return [];
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Votes data:", data);
+
+      // 🧠 Ensure it's always an array
+      if (Array.isArray(data)) {
+        setVotes(data);
+      } else {
+        setVotes([]); // if not array, reset to empty
+      }
+    })
+    .catch((error) => {
+      console.error("Failed to fetch votes data", error);
+      setVotes([]); // fallback
+    });
+};
+
 
     useEffect(() => {
         if (selectedElectionId) {
@@ -202,7 +214,7 @@ const Summary = () => {
                 <div className="bg-gray-50 rounded-xl p-6">
                     {/* Voting Results List */}
                     <div className="space-y-4">
-                        {candidateResults.length > 0 ? (
+                        {candidateResults.length > 0 && candidateResults != null ? (
                             candidateResults.map((result, index) => (
                                 <div key={result.candidate.id} className="bg-white rounded-lg border border-gray-200 p-4 hover:border-gray-300 transition-colors">
                                     <div className="flex items-center justify-between">
@@ -253,44 +265,7 @@ const Summary = () => {
                         )}
                     </div>
 
-                    {/* Recent Votes Section */}
-                    {/* {votes.length > 0 && (
-                        <div className="mt-8">
-                            <h3 className="text-xl font-bold text-gray-900 mb-4">Recent Votes</h3>
-                            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                                <div className="max-h-96 overflow-y-auto">
-                                    {votes.slice(0, 10).map((vote) => (
-                                        <div key={vote.id} className="p-4 border-b border-gray-200 last:border-b-0 hover:bg-gray-50">
-                                            <div className="flex justify-between items-center">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                                                        <User className="h-4 w-4 text-green-600" />
-                                                    </div>
-                                                    <div>
-                                                        <p className="font-medium text-gray-900">
-                                                            Voted for {vote.candidate.firstName} {vote.candidate.lastName}
-                                                        </p>
-                                                        <p className="text-sm text-gray-600">
-                                                            Position: {vote.position.name}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div className="text-right">
-                                                    <p className="text-sm text-gray-500 flex items-center gap-1">
-                                                        <Calendar className="h-4 w-4" />
-                                                        {new Date(vote.createdAt).toLocaleDateString()}
-                                                    </p>
-                                                    <p className="text-xs text-gray-400">
-                                                        {new Date(vote.createdAt).toLocaleTimeString()}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    )} */}
+                    
                 </div>
             </div>
         </div>
